@@ -1,0 +1,47 @@
+name: Instagram Auto Poster
+
+on:
+  schedule:
+    - cron: '30 3 * * *'    # 9:00 AM IST (morning post - video)
+    - cron: '30 15 * * *'   # 9:00 PM IST (evening post - carousel)
+  workflow_dispatch:         # lets you trigger it manually from the Actions tab
+    inputs:
+      slot:
+        description: 'morning or evening (only used for manual runs)'
+        required: false
+        default: 'morning'
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Determine which slot to run
+        id: slot
+        run: |
+          if [ "${{ github.event.schedule }}" = "30 3 * * *" ]; then
+            echo "slot=morning" >> "$GITHUB_OUTPUT"
+          elif [ "${{ github.event.schedule }}" = "30 15 * * *" ]; then
+            echo "slot=evening" >> "$GITHUB_OUTPUT"
+          else
+            echo "slot=${{ github.event.inputs.slot }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run poster script
+        working-directory: .
+        run: python src/poster.py --slot ${{ steps.slot.outputs.slot }}
+        env:
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          START_DATE: ${{ secrets.START_DATE }}
+          REPO_RAW_BASE: ${{ secrets.REPO_RAW_BASE }}

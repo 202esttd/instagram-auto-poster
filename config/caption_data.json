@@ -1,0 +1,27 @@
+{
+  "templates": [
+    "Feeling {mood} in this {outfit} today \u2728\n\n{hashtags}",
+    "{outfit} vibes only \ud83d\udd25 Mood: {mood}\n\n{hashtags}",
+    "New day, new fit \u2014 {outfit} edition \ud83d\udcab Feeling {mood}\n\n{hashtags}",
+    "Obsessed with this {outfit} look \ud83d\ude0d Total {mood} energy\n\n{hashtags}",
+    "Style check: {outfit} \ud83d\udda4 Vibe: {mood}\n\n{hashtags}",
+    "{mood} and unstoppable in {outfit} \ud83d\udc83\n\n{hashtags}",
+    "Today's mood: {mood}. Today's fit: {outfit} \ud83d\udc8e\n\n{hashtags}",
+    "Can't stop wearing {outfit} lately \u2014 pure {mood} energy \ud83c\udf1f\n\n{hashtags}"
+  ],
+  "moods": [
+    "confident", "elegant", "bold", "playful", "chic", "fierce",
+    "dreamy", "radiant", "effortless", "glamorous", "unapologetic", "sultry"
+  ],
+  "outfit_types": [
+    "streetwear", "evening gown", "casual chic", "bohemian", "power suit",
+    "summer dress", "athleisure", "vintage inspired", "monochrome look",
+    "glam party wear", "denim on denim", "statement heels look"
+  ],
+  "hashtags": [
+    "#fashion", "#ootd", "#style", "#fashionista", "#outfitoftheday",
+    "#lookbook", "#streetstyle", "#glam", "#fashionblogger", "#styleinspo",
+    "#trendy", "#chic", "#model", "#photoshoot", "#instafashion",
+    "#stylish", "#fashiongram", "#outfitinspo", "#fashionstyle", "#modeling"
+  ]
+}

@@ -1,0 +1,15 @@
+This folder is for Day 1's content. Put these files here, with these EXACT names:
+
+  morning_video.mp4        <- the Reel/video for the 9 AM post
+  evening_1.jpg            <- carousel image 1 for the 9 PM post
+  evening_2.jpg            <- carousel image 2
+  evening_3.jpg            <- carousel image 3
+  evening_4.jpg            <- carousel image 4
+  evening_5.jpg            <- carousel image 5
+  evening_6.jpg            <- carousel image 6 (optional, 5 or 6 is fine)
+
+Then delete this text file once real content is added.
+
+For Day 2, create a new folder "content/day02" with the same file names, and so
+on up to "content/day30". The script automatically finds the right folder
+based on how many days have passed since START_DATE.
