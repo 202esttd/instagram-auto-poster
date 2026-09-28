@@ -2,18 +2,23 @@ name: Instagram Auto Poster
 
 on:
   schedule:
-    - cron: '30 3 * * *'    # 9:00 AM IST (morning post - video)
-    - cron: '30 15 * * *'   # 9:00 PM IST (evening post - carousel)
-  workflow_dispatch:         # lets you trigger it manually from the Actions tab
+    - cron: '30 3 * * *'    # 9:00 AM IST (morning post)
+    - cron: '30 15 * * *'   # 9:00 PM IST (evening post)
+  workflow_dispatch:
     inputs:
       slot:
         description: 'morning or evening (only used for manual runs)'
         required: false
         default: 'morning'
 
+permissions:
+  contents: write
+
 jobs:
   post:
     runs-on: ubuntu-latest
+    env:
+      HAS_GEMINI_KEY: ${{ secrets.GEMINI_API_KEY != '' }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -37,8 +42,30 @@ jobs:
             echo "slot=${{ github.event.inputs.slot }}" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Generate images if missing
+        if: env.HAS_GEMINI_KEY == 'true'
+        run: python src/generate_images.py --auto --slot ${{ steps.slot.outputs.slot }}
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          START_DATE: ${{ secrets.START_DATE }}
+          IMAGE_MODEL: ${{ vars.IMAGE_MODEL }}
+          IMAGE_ASPECT: ${{ vars.IMAGE_ASPECT }}
+          IMAGES_PER_POST: ${{ vars.IMAGES_PER_POST }}
+
+      - name: Save generated images to repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add content
+          if ! git diff --cached --quiet; then
+            git commit -m "Auto-generated content"
+            git pull --rebase
+            git push
+            echo "Waiting for GitHub to publish the new files..."
+            sleep 45
+          fi
+
       - name: Run poster script
-        working-directory: .
         run: python src/poster.py --slot ${{ steps.slot.outputs.slot }}
         env:
           IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
