@@ -24,7 +24,7 @@ from datetime import date, datetime
 
 from caption_generator import generate_caption
 
-GRAPH_API = "https://graph.facebook.com/v19.0"
+GRAPH_API = "https://graph.instagram.com/v23.0"
 
 
 def get_day_number(start_date_str):
