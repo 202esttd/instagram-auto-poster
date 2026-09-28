@@ -13,17 +13,16 @@ stay on.
 
 ### A. Instagram side
 1. Convert your Instagram account to a **Business** or **Creator** account
-   (Settings → Account type and tools → Switch to Professional Account).
-2. Create/use a Facebook Page and link your Instagram account to it.
-3. Go to [developers.facebook.com](https://developers.facebook.com), create an
-   account, then create a new **App** (type: Business).
-4. Inside the app, add the **Instagram Graph API** product.
-5. Use the [Graph API Explorer](https://developers.facebook.com/tools/explorer)
-   to generate a **long-lived access token** for your Instagram Business
-   account, with these permissions: `instagram_basic`,
-   `instagram_content_publish`, `pages_show_list`, `pages_read_engagement`.
-6. Find your **Instagram Business Account ID** (the Graph API Explorer or
-   `GET /me/accounts` call will show this).
+   (Settings -> Account type and tools -> Switch to Professional Account).
+2. Go to [developers.facebook.com](https://developers.facebook.com), create a
+   new **App** with the use case **"Manage messaging & content on Instagram"**.
+3. In the app: Use cases -> Customize -> **Permissions and features** and add
+   `instagram_business_basic` and `instagram_business_content_publish`.
+4. App roles -> Roles -> **Instagram Testers** -> add your Instagram username,
+   then accept the invite at instagram.com/accounts/manage_access.
+5. Use cases -> Customize -> **API setup with Instagram login** -> Add account
+   -> **Generate token**. This token is your `IG_ACCESS_TOKEN`.
+6. The account ID shown next to your username is your `IG_USER_ID`.
 
 ### B. GitHub side
 1. Create a free account at [github.com](https://github.com).
