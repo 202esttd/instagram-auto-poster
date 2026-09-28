@@ -4,7 +4,7 @@ Main posting script for the Instagram Auto Poster.
 What it does:
   1. Figures out which "day" of the 30-day plan today is (based on START_DATE).
   2. Looks inside content/dayXX/ for the right files:
-       - morning slot -> morning_video.mp4
+       - morning slot -> morning_video.mp4 (if present) else morning_1.jpg... carousel
        - evening slot -> evening_1.jpg, evening_2.jpg, ... (carousel, 2-10 images)
   3. Builds a public URL for each file (repo must be PUBLIC on GitHub).
   4. Generates a caption automatically.
@@ -17,6 +17,7 @@ Run manually for testing:
 import os
 import sys
 import time
+import json
 import argparse
 import requests
 from pathlib import Path
@@ -93,6 +94,34 @@ def publish_container(ig_user_id, access_token, creation_id):
     return resp.json()
 
 
+def find_images(folder, slot):
+    files = []
+    for ext in ("jpg", "jpeg", "png"):
+        files += sorted(folder.glob(f"{slot}_*.{ext}"))
+    return files
+
+
+def read_look(folder, slot):
+    path = folder / f"{slot}_look.json"
+    if path.exists():
+        try:
+            return json.loads(path.read_text(encoding="utf-8"))
+        except Exception:
+            return {}
+    return {}
+
+
+def post_carousel(ig_user_id, access_token, repo_raw_base, image_files, caption):
+    children_ids = []
+    for img_path in image_files[:10]:
+        img_url = build_url(repo_raw_base, img_path.as_posix())
+        print(f"Uploading carousel image: {img_url}")
+        children_ids.append(create_image_container(ig_user_id, access_token, img_url, is_carousel_item=True))
+    carousel_id = create_carousel_container(ig_user_id, access_token, children_ids, caption)
+    wait_until_ready(carousel_id, access_token)
+    return publish_container(ig_user_id, access_token, carousel_id)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--slot", required=True, choices=["morning", "evening"])
@@ -109,41 +138,26 @@ def main():
         sys.exit(0)
 
     day_folder = Path(f"content/day{day_number:02d}")
-    caption = generate_caption()
+    look = read_look(day_folder, args.slot)
+    caption = generate_caption(outfit=look.get("outfit_label"), mood=look.get("mood"))
 
-    if args.slot == "morning":
-        video_path = day_folder / "morning_video.mp4"
-        if not video_path.exists():
-            print(f"ERROR: Missing file {video_path}. Add it before this slot runs.")
-            sys.exit(1)
-
-        video_url = build_url(repo_raw_base, str(video_path))
+    video_path = day_folder / "morning_video.mp4"
+    if args.slot == "morning" and video_path.exists():
+        video_url = build_url(repo_raw_base, video_path.as_posix())
         print(f"Uploading video: {video_url}")
         container_id = create_video_container(ig_user_id, access_token, video_url, caption)
         wait_until_ready(container_id, access_token)
-        result = publish_container(ig_user_id, access_token, container_id)
-        print("Morning video posted successfully:", result)
+        print("Morning video posted successfully:", publish_container(ig_user_id, access_token, container_id))
+        return
 
-    else:  # evening -> carousel
-        image_files = sorted(day_folder.glob("evening_*.jpg")) + \
-                      sorted(day_folder.glob("evening_*.jpeg")) + \
-                      sorted(day_folder.glob("evening_*.png"))
+    image_files = find_images(day_folder, args.slot)
+    if not (2 <= len(image_files) <= 10):
+        print(f"ERROR: need 2-10 images named {args.slot}_1.jpg, {args.slot}_2.jpg... "
+              f"in {day_folder}. Found {len(image_files)}.")
+        sys.exit(1)
 
-        if not (2 <= len(image_files) <= 10):
-            print(f"ERROR: Need 2-10 images named evening_1.jpg, evening_2.jpg... "
-                  f"in {day_folder}. Found {len(image_files)}.")
-            sys.exit(1)
-
-        children_ids = []
-        for img_path in image_files:
-            img_url = build_url(repo_raw_base, str(img_path))
-            print(f"Uploading carousel image: {img_url}")
-            children_ids.append(create_image_container(ig_user_id, access_token, img_url, is_carousel_item=True))
-
-        carousel_id = create_carousel_container(ig_user_id, access_token, children_ids, caption)
-        wait_until_ready(carousel_id, access_token)
-        result = publish_container(ig_user_id, access_token, carousel_id)
-        print("Evening carousel posted successfully:", result)
+    result = post_carousel(ig_user_id, access_token, repo_raw_base, image_files, caption)
+    print(f"{args.slot.capitalize()} carousel posted successfully:", result)
 
 
 if __name__ == "__main__":

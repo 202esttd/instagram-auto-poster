@@ -7,14 +7,14 @@ import random
 from pathlib import Path
 
 
-def generate_caption():
+def generate_caption(outfit=None, mood=None):
     data_path = Path(__file__).parent.parent / "config" / "caption_data.json"
     with open(data_path, "r", encoding="utf-8") as f:
         data = json.load(f)
 
     template = random.choice(data["templates"])
-    mood = random.choice(data["moods"])
-    outfit = random.choice(data["outfit_types"])
+    mood = mood or random.choice(data["moods"])
+    outfit = outfit or random.choice(data["outfit_types"])
     hashtags = " ".join(random.sample(data["hashtags"], k=min(15, len(data["hashtags"]))))
 
     return template.format(mood=mood, outfit=outfit, hashtags=hashtags)

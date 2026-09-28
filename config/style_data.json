@@ -1,0 +1,50 @@
+{
+  "garments": [
+    "satin slip midi dress", "tailored blazer dress", "off-shoulder ruffle mini dress",
+    "high-slit evening gown", "matching two-piece co-ord set", "leather jacket with mini skirt",
+    "oversized trench coat over a fitted dress", "pleated maxi skirt with cropped top",
+    "denim jacket with flared jeans", "velvet wrap dress", "silk blouse with wide-leg trousers",
+    "halter-neck maxi dress", "sequin party dress", "power suit with cropped blazer",
+    "knit sweater dress", "floral summer sundress", "structured corset-style dress",
+    "belted jumpsuit", "bohemian tiered maxi dress", "athleisure set with cropped jacket",
+    "asymmetric one-shoulder gown", "cargo pants with fitted crop top", "silk shirt dress",
+    "bodycon midi dress", "cape blazer with tailored shorts"
+  ],
+  "colors": [
+    "emerald green", "deep burgundy", "ivory white", "jet black", "dusty rose",
+    "royal blue", "champagne gold", "lavender", "crimson red", "sage green",
+    "cobalt blue", "chocolate brown"
+  ],
+  "heels": [
+    "black stiletto pumps", "nude pointed-toe heels", "red patent stilettos",
+    "metallic silver strappy sandals", "white block-heel sandals", "gold ankle-strap heels",
+    "heeled knee-high leather boots", "chunky platform heels", "satin bow pumps",
+    "transparent-strap heels", "pastel kitten heels", "black lace-up heeled sandals",
+    "crystal-embellished heels", "snakeskin-print heels"
+  ],
+  "settings": [
+    "a modern luxury hotel lobby", "a rooftop terrace at golden hour", "a minimal white photo studio",
+    "a neon-lit city street at night", "a marble staircase in a classic mansion",
+    "a tropical resort poolside", "an old-town cobblestone street", "a bright art gallery",
+    "an urban street with a graffiti wall", "desert dunes at sunset", "a botanical garden greenhouse",
+    "a vintage cafe interior", "a beach boardwalk at sunrise", "a glass-walled modern lobby",
+    "a fashion runway backstage", "a cherry blossom park", "an industrial loft with large windows",
+    "a balcony with a city skyline view", "a snowy mountain lodge terrace", "a luxury car showroom"
+  ],
+  "lighting": [
+    "soft natural window light", "warm golden hour sunlight", "dramatic studio strobe lighting",
+    "cinematic evening light", "bright high-key studio light", "moody neon glow"
+  ],
+  "shots": [
+    "full-body standing pose facing the camera",
+    "walking towards the camera, mid-stride, full body",
+    "seated on a chair or steps, legs elegantly crossed",
+    "three-quarter length shot with one hand on the hip",
+    "close-up beauty portrait, head and shoulders",
+    "looking back over the shoulder, full body from behind",
+    "low-angle full-body power pose",
+    "detail shot of the heels and legs with the outfit visible",
+    "leaning against a wall in a relaxed pose",
+    "candid laughing moment, mid-body shot"
+  ]
+}

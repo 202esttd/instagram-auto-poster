@@ -1,3 +1,7 @@
+"""
+Connection test: verifies your access token and account ID work.
+It does NOT post anything. Run it from GitHub -> Actions -> "Check Connection".
+"""
 import os
 import sys
 import requests
