@@ -1,0 +1,51 @@
+name: Generate Images
+
+on:
+  workflow_dispatch:
+    inputs:
+      from_day:
+        description: 'First day to generate (1-30)'
+        required: true
+        default: '1'
+      to_day:
+        description: 'Last day to generate (1-30)'
+        required: true
+        default: '1'
+      slot:
+        description: 'morning, evening or both'
+        required: true
+        default: 'both'
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -r requirements.txt
+
+      - name: Generate images
+        run: python src/generate_images.py --from-day ${{ github.event.inputs.from_day }} --to-day ${{ github.event.inputs.to_day }} --slot ${{ github.event.inputs.slot }}
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          IMAGE_MODEL: ${{ vars.IMAGE_MODEL }}
+          IMAGE_ASPECT: ${{ vars.IMAGE_ASPECT }}
+          IMAGES_PER_POST: ${{ vars.IMAGES_PER_POST }}
+
+      - name: Save images to repo
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add content
+          if ! git diff --cached --quiet; then
+            git commit -m "Generated images"
+            git pull --rebase
+            git push
+          fi
