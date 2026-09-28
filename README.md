@@ -99,3 +99,28 @@ tab → "Instagram Auto Poster" → "Run workflow".
   per account via the API — 2 posts a day is well within that limit.
 - If a post fails, check the **Actions** tab on GitHub — every run's logs are
   saved there and will show the exact error from Instagram.
+
+---
+
+## Full-auto mode (AI-generated images)
+
+The system can create the fashion images itself, using your character
+reference images so the same identity is kept in every picture.
+
+1. Put 2-4 clear reference images of your character in the `character/`
+   folder (`ref1.jpg`, `ref2.jpg`, ...).
+2. Get a Gemini API key at https://aistudio.google.com/apikey (billing must be
+   enabled for image models) and add it as the GitHub secret `GEMINI_API_KEY`.
+3. Generate ahead of time (recommended, so you can review): Actions ->
+   **Generate Images** -> Run workflow (start with from_day 1, to_day 1). Look at
+   the pictures in `content/day01/`; delete any you dislike and re-run to
+   regenerate only the missing ones.
+4. If a day already has images, nothing is regenerated. If a day has none, the
+   daily post workflow generates them automatically just before posting.
+5. Video is optional: if `content/dayXX/morning_video.mp4` exists it is posted
+   as a Reel in the morning; otherwise the morning post is an AI-generated
+   carousel.
+
+Optional repository *variables* (Settings -> Secrets and variables -> Actions
+-> Variables): `IMAGE_MODEL` (default `gemini-3.1-flash-image`), `IMAGE_ASPECT`
+(default `9:16`), `IMAGES_PER_POST` (default `5`).
